@@ -2,7 +2,12 @@
 	<div>
 		<div class="box">
 			<div class="dynamic">
-				<h1>市场动态</h1>
+				<h1>
+					<span class="spanGradual">市</span>
+					<span class="spanGradual">场</span>
+					<span class="spanGradual">动</span>
+					<span>态</span>
+				</h1>
 				<div class="priceUrea">
 					<div class="title">
 						<div>
@@ -35,7 +40,9 @@
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
+						<div id="turnoverUrea" :style="{width: '100%', height: '5.66rem'}">
 
+						</div>
 					</div>
 				</div>
 				<div class="allPrice">
@@ -53,13 +60,16 @@
 					</div>
 					<div class="chart">
 						<div id="allPriceChart" :style="{width: '100%', height: '5.66rem'}">
-							
+
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="factory">
-				<h1>工厂</h1>
+				<h1>
+					<span class="spanGradual">工</span>
+					<span class="spanGradual">厂</span>
+				</h1>
 				<div class="priceUrea">
 					<div class="title">
 						<div>
@@ -90,11 +100,12 @@
 			}
 		},
 		mounted() {
-			this.drawLine();
+			this.setDrawLine();
 			this.setPriceUreaChart();
+			this.setTurnoverUrea()
 		},
 		methods: {
-			drawLine() {
+			setDrawLine() {
 				// 基于准备好的dom，初始化echarts实例
 				let myChart = this.$echarts.init(document.getElementById('allPriceChart'), {
 					renderer: 'svg'
@@ -275,23 +286,24 @@
 					},
 					tooltip: {
 						trigger: 'axis',
-						confine:true,
+						confine: true,
 					},
-//					legend: {
-//						data: ['西北', '河北', '鲁西', '鲁南', '华东港口','广州港口','河南','西南']
-//					},
+
+					//					legend: {
+					//						data: ['西北', '河北', '鲁西', '鲁南', '华东港口','广州港口','河南','西南']
+					//					},
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-//						data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12/11','12/12','12/13','12/14','12/15'],
-						data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7'],
+						//						data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12/11','12/12','12/13','12/14','12/15'],
+						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
 							}
 						},
 						axisLabel: {
-							interval:0,
+							interval: 0,
 							color: '#7C839F',
 							fontSize: '0.22rem'
 						},
@@ -325,13 +337,13 @@
 					series: [{
 							name: '西北',
 							type: 'line',
-							symbol:'circle',
-							showSymbol:false,
-							symbolSize:3,
+							symbol: 'circle',
+							showSymbol: false,
+							symbolSize: 3,
 							data: [120, 132, 101, 134, 90, 230, 210],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -346,19 +358,19 @@
 										globalCoord: false // 缺省为 false
 									}
 								}
-								
+
 							}
 						},
 						{
 							name: '河北',
 							type: 'line',
-							symbol:'circle',
-							showSymbol:false,
-							symbolSize:3,
+							symbol: 'circle',
+							showSymbol: false,
+							symbolSize: 3,
 							data: [220, 182, 191, 234, 290, 330, 310],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -378,13 +390,13 @@
 						{
 							name: '鲁西',
 							type: 'line',
-							symbol:'circle',
-							showSymbol:false,
-							symbolSize:3,
+							symbol: 'circle',
+							showSymbol: false,
+							symbolSize: 3,
 							data: [150, 232, 201, 154, 190, 330, 410],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -404,13 +416,13 @@
 						{
 							name: '鲁南',
 							type: 'line',
-							symbol:'circle',
-							symbolSize:3,
-							showSymbol:false,
+							symbol: 'circle',
+							symbolSize: 3,
+							showSymbol: false,
 							data: [320, 332, 301, 334, 390, 330, 320],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -430,13 +442,13 @@
 						{
 							name: '华东港口',
 							type: 'line',
-							symbol:'circle',
-							symbolSize:3,
-							showSymbol:false,
+							symbol: 'circle',
+							symbolSize: 3,
+							showSymbol: false,
 							data: [820, 932, 901, 934, 1290, 1330, 1320],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -456,13 +468,13 @@
 						{
 							name: '广州港口',
 							type: 'line',
-							symbol:'circle',
-							symbolSize:3,
-							showSymbol:false,
+							symbol: 'circle',
+							symbolSize: 3,
+							showSymbol: false,
 							data: [820, 752, 901, 1023, 1290, 1630, 1320],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -482,13 +494,13 @@
 						{
 							name: '河南',
 							type: 'line',
-							symbol:'circle',
-							symbolSize:3,
-							showSymbol:false,
+							symbol: 'circle',
+							symbolSize: 3,
+							showSymbol: false,
 							data: [1456, 932, 253, 934, 894, 1330, 1053],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -508,13 +520,13 @@
 						{
 							name: '西南',
 							type: 'line',
-							symbol:'circle',
-							symbolSize:3,
-							showSymbol:false,
+							symbol: 'circle',
+							symbolSize: 3,
+							showSymbol: false,
 							data: [123, 1960, 258, 789, 1478, 1330, 1593],
-							itemStyle:{
-								normal:{
-									color:{
+							itemStyle: {
+								normal: {
+									color: {
 										type: 'linear',
 										x: 0.5,
 										y: 0.5,
@@ -533,7 +545,195 @@
 						}
 					]
 				});
+			},
+			setTurnoverUrea() {
+				let myChart = this.$echarts.init(document.getElementById('turnoverUrea'), {
+					renderer: 'svg'
+				})
+				// 绘制图表
+				myChart.setOption({
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b}: {c} ({d}%)",
+						confine: true,
+					},
+					//					legend: {
+					//						orient: 'vertical',
+					//						data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+					//					},
+					series: [{
+						name: '尿素成交量',
+						type: 'pie',
+						radius: ['60%', '80%'],
+						avoidLabelOverlap: false,
+						label: {
+							normal: {
+								show: false,
+								position: 'center'
+							},
+							emphasis: {
+								show: true,
+								textStyle: {
+									fontSize: '30',
+									fontWeight: 'bold',
+									color:'#fff'
+								}
+							}
+						},
+						labelLine: {
+							show: false,
+						},
+						data: [{
+								value: 1730,
+								name: '华东区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#1cae95' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#7dc16f' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1125,
+								name: '华北区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#00caa4' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#469fff' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1235,
+								name: '鲁西区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#42a1fa' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#6089f0' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1278,
+								name: '鲁南区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#8260f0' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#609af0' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1346,
+								name: '华东港口',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#d760f0' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#8260f0' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1322,
+								name: '河北区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#dd2f8e' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#c660f0' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							},
+							{
+								value: 1146,
+								name: '山东区域',
+								itemStyle: {
+									color: {
+										type: 'linear',
+										x: 0,
+										y: 0,
+										x2: 1,
+										y2: 1,
+										colorStops: [{
+											offset: 0,
+											color: '#c738a9' // 0% 处的颜色
+										}, {
+											offset: 1,
+											color: '#fb8373' // 100% 处的颜色
+										}],
+										globalCoord: false // 缺省为 false
+									}
+								}
+							}
+						]
+					}]
 
+				})
 			}
 		}
 	}
@@ -548,9 +748,19 @@
 			h1 {
 				padding-top: 0.28rem;
 				padding-left: 0.28rem;
-				font-size: 0.6rem;
-				color: white;
-				font-weight: 500;
+				span{
+					font-size: 0.6rem;
+					font-weight: 500;
+					color: white;
+				}
+				.spanGradual{
+					font-size: 0.6rem;
+					font-weight: 500;
+					background: linear-gradient(left,#fff,rgba(255, 255, 255, 0.4));
+					-webkit-background-clip: text;
+					color: transparent;
+				}
+				
 			}
 			.priceUrea,
 			.quantityUrea,
@@ -626,5 +836,4 @@
 	.factory .title div {
 		width: 3.38rem !important;
 	}
-	
 </style>

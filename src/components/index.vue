@@ -3,10 +3,10 @@
 		<div class="box">
 			<div class="dynamic">
 				<h1>
-					<span class="spanGradual">市</span>
+					<!--<span class="spanGradual">市</span>
 					<span class="spanGradual">场</span>
-					<span class="spanGradual">动</span>
-					<span>态</span>
+					<span class="spanGradual">动</span>-->
+					<span>市场动态</span>
 				</h1>
 				<div class="priceUrea">
 					<div class="title">
@@ -90,8 +90,9 @@
 			</div>
 			<div class="factory">
 				<h1>
-					<span class="spanGradual">工</span>
-					<span class="spanGradual">厂</span>
+					<!--<span class="spanGradual">工</span>
+					<span class="spanGradual">厂</span>-->
+					<span>工厂</span>
 				</h1>
 				<div class="priceUrea">
 					<div class="title">
@@ -127,7 +128,7 @@
 		data() {
 			return {
 				priceUreaChartName: ['西北', '河北', '鲁西', '鲁南', '华东港口', '广州港口', '河南', '西南'],
-				priceUreaChartData: [120, 220, 150, 320, 820, 820, 500, 123],
+				priceUreaChartData: [],
 				priceUreaChartStyle: [
 					"background:linear-gradient(#1cae95, #7dc16f)",
 					"background:linear-gradient(#469fff, #00caa4)",
@@ -174,9 +175,13 @@
 			this.setPriceUreaChart();
 			this.setTurnoverUrea();
 			this.setUreaFactory();
+			this.priceUreaChartData = [120, 220, 150, 320, 820, 820, 500, 123];
+			this.ureaFactoryData = [120, 220, 150, 320];
+						
 		},
 		methods: {
 			setUreaFactory() {
+				const _this = this;
 				let myChart = this.$echarts.init(document.getElementById('ureaFactory'), {
 					renderer: 'svg'
 				})
@@ -189,7 +194,15 @@
 						trigger: 'axis',
 						confine: true,
 						alwaysShowContent: true,
+						formatter: function(params) {
+							_this.ureaFactoryData = [];
+				            for (var i = 0; i<params.length;i++) {
+				            	_this.ureaFactoryData.push(params[i].data)
+				            }
+				       }
 					},
+					
+
 
 					//					legend: {
 					//						data: ['西北', '河北', '鲁西', '鲁南', '华东港口','广州港口','河南','西南']
@@ -523,6 +536,7 @@
 				});
 			},
 			setPriceUreaChart() {
+				const _this = this;
 				let myChart = this.$echarts.init(document.getElementById('priceUreaChart'), {
 					renderer: 'svg'
 				})
@@ -534,16 +548,31 @@
 						trigger: 'axis',
 						confine: true,
 						alwaysShowContent: true,
-					},
+						formatter: function(params) {
+							_this.priceUreaChartData = [];
+				            for (var i = 0; i<params.length;i++) {
+				            	_this.priceUreaChartData.push(params[i].data)
+				            }
+				       }
+					}, 
 
 					//					legend: {
 					//						data: ['西北', '河北', '鲁西', '鲁南', '华东港口','广州港口','河南','西南']
 					//					},
+					 dataZoom: [
+                        {
+                            type: 'inside',
+                            throttle:'50',
+                            minValueSpan:4,
+                            start: 0,
+                            end: 15
+                        }
+                	],
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-						//						data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12/11','12/12','12/13','12/14','12/15'],
-						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+												data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12/11','12/12','12/13','12/14','12/15'],
+//						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
@@ -792,6 +821,10 @@
 							}
 						}
 					]
+				});
+				myChart.on('click', function (params) {
+				    // 控制台打印数据的名称
+				    console.log(params);
 				});
 
 			},

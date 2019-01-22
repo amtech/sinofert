@@ -43,7 +43,6 @@
 						<p>2018-12-03</p>
 						<h3>至</h3>
 						<p>2019-12-30</p>
-						<p style="margin-left: 0.3rem;">我司</p>
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
@@ -124,6 +123,7 @@
 </template>
 
 <script>
+	import { getTypes } from '@/api/address';
 	export default {
 		data() {
 			return {
@@ -177,9 +177,14 @@
 			this.setUreaFactory();
 			this.priceUreaChartData = [120, 220, 150, 320, 820, 820, 500, 123];
 			this.ureaFactoryData = [120, 220, 150, 320];
-						
+			this.getthis();
 		},
 		methods: {
+			getthis(){
+				getTypes().then(res =>{
+					console.log(res.data)
+				})
+			},
 			setUreaFactory() {
 				const _this = this;
 				let myChart = this.$echarts.init(document.getElementById('ureaFactory'), {
@@ -542,7 +547,7 @@
 				})
 				myChart.setOption({
 					title: {
-						text: ''
+						text: '中化化工'
 					},
 					tooltip: {
 						trigger: 'axis',
@@ -555,24 +560,10 @@
 				            }
 				       }
 					}, 
-
-					//					legend: {
-					//						data: ['西北', '河北', '鲁西', '鲁南', '华东港口','广州港口','河南','西南']
-					//					},
-					 dataZoom: [
-                        {
-                            type: 'inside',
-                            throttle:'50',
-                            minValueSpan:4,
-                            start: 0,
-                            end: 15
-                        }
-                	],
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-												data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7','12/8','12/9','12/10','12/11','12/12','12/13','12/14','12/15'],
-//						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+						data: ['12/1','12/2','12/3','12/4','12/5','12/6','12/7'],
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
@@ -855,7 +846,6 @@
 							color: '#d5d8e0',
 							fontSize: 12,
 						},
-
 					},
 					graphic: {
 						elements: [{

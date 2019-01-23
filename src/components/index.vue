@@ -22,12 +22,20 @@
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
+						<p style="color: white;" @click="setPriceUreaChart" v-if="priceUreaCheck == '1'">返回</p>
 						<div id="priceUreaChart" :style="{width: '100%', height: '5.66rem'}"></div>
-						<div class="priceUreaChartLagend">
-							<div class="priceUreaChartLagend_item" v-for="(item,index) in priceUreaChartName">
+						<div class="priceUreaChartLagend" v-if="priceUreaCheck == '0'">
+							<div class="priceUreaChartLagend_item" v-for="(item,index) in priceUreaChartName" @click="check(item,index)">
 								<span v-bind:style="priceUreaChartStyle[index]"></span>&nbsp;
 								<span>{{priceUreaChartData[index]}}元/吨</span>&emsp;
 								<span>{{priceUreaChartName[index]}}</span>
+							</div>
+						</div>
+						<div class="priceUreaChartLagend" v-else>
+							<div class="priceUreaChartLagend_item" v-for="(item,index) in priceUreaChartName2">
+								<span v-bind:style="priceUreaChartStyle2[index]"></span>&nbsp;
+								<span>{{priceUreaChartData2[index]}}元/吨</span>&emsp;
+								<span>{{priceUreaChartName2[index]}}</span>
 							</div>
 						</div>
 					</div>
@@ -55,7 +63,7 @@
 								<span>{{turnoverUreaData[index]}}</span>
 								<span>{{turnoverUreaName[index]}}</span>
 							</div>
-
+							<p style="clear: both;"></p>
 						</div>
 					</div>
 				</div>
@@ -131,9 +139,22 @@
 			return {
 				data: '',
 				calendarShow: '',
+				priceUreaCheck: '0',
 				priceUreaChartName: [],
 				priceUreaChartData: [],
 				priceUreaChartStyle: [
+					"background:linear-gradient(#1cae95, #7dc16f)",
+					"background:linear-gradient(#469fff, #00caa4)",
+					"background:linear-gradient(#42a1fa, #6089f0)",
+					"background:linear-gradient(#469fff, #00caa4)",
+					"background:linear-gradient(#c75deb, #da3599)",
+					"background:linear-gradient(#8260f0, #d760f0)",
+					"background:linear-gradient(#ffff00, #ffae00)",
+					"background:linear-gradient(#f0a760, #dd792f)",
+				],
+				priceUreaChartName2: [],
+				priceUreaChartData2: [],
+				priceUreaChartStyle2: [
 					"background:linear-gradient(#1cae95, #7dc16f)",
 					"background:linear-gradient(#469fff, #00caa4)",
 					"background:linear-gradient(#42a1fa, #6089f0)",
@@ -181,6 +202,12 @@
 					type: '尿素 小颗粒',
 				},
 				listQuery2: {
+					startDate: '2019-01-17',
+					endDate: '2019-01-23',
+					type: '尿素 小颗粒',
+					bigArea: '',
+				},
+				listQuery3: {
 					startDate: '2019-01-21',
 					bigArea: '东北工贸大区',
 					sunMarket: '2区',
@@ -202,19 +229,20 @@
 			getType() {
 				getTypes().then(res => {
 					this.types = res.data.data;
-
 				})
 			},
 			getRegions() {
 				getRegion().then(res => {
 					this.places = res.data.data;
-
 				})
 			},
+			
 			setPriceUreaChart() {
 				const _this = this;
 				this.priceUreaChartName = [];
-
+				this.priceUreaCheck = '0';
+//				this.$refs.priceUreaCheck.style.display = 'block';
+//				this.$refs.priceUreaCheck2.style.display = 'none';
 				let myChart = this.$echarts.init(document.getElementById('priceUreaChart'), {
 					renderer: 'svg'
 				})
@@ -420,6 +448,234 @@
 						this.priceUreaChartData.push(res.data.data[i].dealPriceData[6])
 						data.push({
 							name: this.priceUreaChartName[i],
+							type: 'line',
+							symbol: 'circle',
+							showSymbol: false,
+							symbolSize: 3,
+							data: res.data.data[i].dealPriceData,
+							itemStyle: style[i],
+						})
+					}
+					myChart.setOption({
+						series: data,
+					})
+				})
+
+			},
+			check(item, index) {
+				console.log(index)
+				const _this = this;
+				this.priceUreaChartName2 = [];
+				this.priceUreaCheck = '1';
+//				this.$refs.priceUreaCheck.style.display = 'none';
+//				this.$refs.priceUreaCheck2.style.display = 'block';
+				
+				let myChart = this.$echarts.init(document.getElementById('priceUreaChart'), {
+					renderer: 'svg'
+				})
+				myChart.setOption({
+					tooltip: {
+						trigger: 'axis',
+						confine: true,
+						alwaysShowContent: true,
+						formatter: function(params) {
+							_this.priceUreaChartData2 = [];
+							for(var i = 0; i < params.length; i++) {
+								_this.priceUreaChartData2.push(params[i].data)
+							}
+						}
+					},
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+						axisLine: {
+							lineStyle: {
+								color: '#5d6069'
+							}
+						},
+						axisLabel: {
+							interval: 0,
+							color: '#7C839F',
+							fontSize: '0.22rem'
+						},
+						axisTick: {
+							alignWithLabel: true,
+						}
+					},
+					yAxis: {
+						type: 'value',
+						position: 'right',
+						nameLocation: 'end',
+						nameGap: 20,
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							show: false,
+						},
+						splitLine: {
+							lineStyle: {
+								// 使用深浅的间隔色
+								color: "#5d6069"
+							}
+						},
+						axisLabel: {
+							show: true,
+							color: '#8289A3',
+							fontSize: '0.2rem'
+						}
+					},	
+					series: []
+				})
+				this.listQuery2.bigArea = item;
+				getSunMarketEverydayPrice(this.listQuery2).then(res => {
+					console.log(res.data.data)
+					let data = [];
+					let style = [{
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+
+								colorStops: [{
+									offset: 0,
+									color: '#1cae95' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#7dc16f' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#469fff' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#00caa4' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#42a1fa' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#6089f0' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#469fff' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#00caa4' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#c75deb' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#da3599' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#8260f0' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#d760f0' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#ffff00' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#ffae00' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#f0a760' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#dd792f' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}];
+					for(var i = 0; i < res.data.data.length; i++) {
+						this.priceUreaChartName2.push(res.data.data[i].areaName)
+						this.priceUreaChartData2.push(res.data.data[i].dealPriceData[6])
+						data.push({
+							name: this.priceUreaChartName2[i],
 							type: 'line',
 							symbol: 'circle',
 							showSymbol: false,
@@ -829,7 +1085,7 @@
 				let myChart = this.$echarts.init(document.getElementById('allPriceChart'), {
 					renderer: 'svg'
 				})
-				
+
 				// 绘制图表
 				this.allPriceChartName = [];
 				this.allPriceChartData = [];
@@ -844,7 +1100,7 @@
 					myChart.setOption({
 						tooltip: {
 							trigger: 'item',
-//							formatter: '{b}：{c}元/吨',
+							//							formatter: '{b}：{c}元/吨',
 							alwaysShowContent: true,
 						},
 						grid: {
@@ -854,7 +1110,7 @@
 							containLabel: true
 						},
 						xAxis: {
-							data:this.allPriceChartName,
+							data: this.allPriceChartName,
 							type: 'category',
 
 							axisTick: {
@@ -984,7 +1240,7 @@
 												color: '#d73ca9' // 100% 处的颜色
 											}],
 											globalCoord: false // 缺省为 false
-										},{
+										}, {
 											type: 'linear',
 											x: 0.5,
 											y: 0.5,
@@ -1002,7 +1258,7 @@
 									},
 								}
 							},
-							data:this.allPriceChartData,
+							data: this.allPriceChartData,
 							barMaxWidth: 15,
 						}]
 					})
@@ -1091,7 +1347,15 @@
 					}
 				}
 				.chart {
-					overflow: auto;
+					width: 100%;
+					margin-top: 0.3rem;
+					height: 8.66rem;
+					background: #2e3a66;
+					padding: 0 0.28rem;
+				}
+				.chart2 {
+					display: none;
+					width: 100%;
 					margin-top: 0.3rem;
 					height: 8.66rem;
 					background: #2e3a66;

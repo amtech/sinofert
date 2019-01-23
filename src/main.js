@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
+import dateTime from 'vue-date-time-m';
+Vue.component('data-time', dateTime)
 
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;

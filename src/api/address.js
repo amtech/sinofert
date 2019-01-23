@@ -14,7 +14,7 @@ export function getTypes() {
 export function getRegion() {
     return axios({
         method: 'post',
-        url: ManageService + 'sinofertTransport/marketInfo/',
+        url: ManageService + 'sinofertTransport/marketInfo/selectArea',
     });
 }
 

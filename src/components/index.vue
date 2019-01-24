@@ -6,23 +6,29 @@
 					<!--<span class="spanGradual">市</span>
 					<span class="spanGradual">场</span>
 					<span class="spanGradual">动</span>-->
-					<span>市场动态</span>
+					<p>市场动态</p>
 				</h1>
 				<div class="priceUrea">
 					<div class="title">
 						<div>
-							<p>全国尿素市场成交价统计</p>
+							<p>全国{{priceUreaTitle}}市场成交价统计</p>
 						</div>
 						<div></div>
 					</div>
 					<div class="time">
-						<p>2018-12-03</p>
+
+						<group>
+							<calendar title=" " @on-change="priceUreaChange" v-model="listQuery.startDate"></calendar>
+						</group>
 						<p class='zp'>至</p>
-						<p>2019-12-30</p>
+						<p>{{listQuery.endDate}}</p>
+						<popup-radio @on-hide="priceUreaChange2" style="margin-left: 0.2rem;" title=" " :options="types" v-model="listQuery.type"></popup-radio>
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
-						<p style="color: white;" @click="setPriceUreaChart" v-if="priceUreaCheck == '1'">返回</p>
+						<p style="position: absolute;z-index: 99; top: 0.28rem;" @click="setPriceUreaChart" v-if="priceUreaCheck == '1'">
+							<x-icon style="fill: #fff;" type="ios-close-outline" size="30"></x-icon>
+						</p>
 						<div id="priceUreaChart" :style="{width: '100%', height: '5.66rem'}"></div>
 						<div class="priceUreaChartLagend" v-if="priceUreaCheck == '0'">
 							<div class="priceUreaChartLagend_item" v-for="(item,index) in priceUreaChartName" @click="check(item,index)">
@@ -43,14 +49,17 @@
 				<div class="quantityUrea">
 					<div class="title">
 						<div>
-							<p>全国尿素各区域成交量统计</p>
+							<p>全国{{quantityUreaTitle}}各区域成交量统计</p>
 						</div>
 						<div></div>
 					</div>
 					<div class="time">
-						<p>2018-12-03</p>
+						<group>
+							<calendar title=" " @on-change="quantityUreaChange" v-model="listQuery3.startDate"></calendar>
+						</group>
 						<p class='zp'>至</p>
-						<p>2019-12-30</p>
+						<p>{{listQuery.endDate}}</p>
+						<popup-radio @on-hide="quantityUreaChange2" style="margin-left: 0.2rem;" title=" " :options="types" v-model="listQuery3.type"></popup-radio>
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
@@ -75,9 +84,12 @@
 						<div></div>
 					</div>
 					<div class="time">
-						<p>2018-12-03</p>
-						<p style="margin-left: 0.24rem;">东北工贸大区</p>
-						<p style="margin-left: 0.24rem;">2区</p>
+						<group>
+							<calendar title=" " @on-change="allPriceChange" v-model="listQuery4.startDate"></calendar>
+						</group>
+						<div class="region">
+							<popup-picker style="margin-left: 0.15rem;" title=" " @on-change="allPriceChange2" :data="list3" :columns="2" v-model="region" show-name></popup-picker>
+						</div>
 						<div style="clear: both;"></div>
 					</div>
 					<div class="chart">
@@ -99,32 +111,82 @@
 				<h1>
 					<!--<span class="spanGradual">工</span>
 					<span class="spanGradual">厂</span>-->
-					<span>工厂</span>
+					<p style="float: left;">工厂</p>
+					<div style="float: left;">
+						<button-tab v-model='factoryindex1'>
+							<button-tab-item>成交价</button-tab-item>
+							<button-tab-item>成交量</button-tab-item>
+						</button-tab>
+					</div>
+					<p style="clear: both;"></p>
 				</h1>
-				<div class="priceUrea">
-					<div class="title">
+
+				<swiper v-model="factoryindex1" height="9rem" :show-dots="false">
+					<swiper-item :key="0">
 						<div>
-							<p>工厂尿素成交价统计</p>
-						</div>
-						<div></div>
-					</div>
-					<div class="time">
-						<p>2018-12-03</p>
-						<p class='zp'>至</p>
-						<p>2019-12-30</p>
-						<div style="clear: both;"></div>
-					</div>
-					<div class="chart">
-						<div id="ureaFactory" :style="{width: '100%', height: '5.66rem'}"></div>
-						<div class="ureaFactoryLagend">
-							<div class="ureaFactoryLagend_item" v-for="(item,index) in ureaFactoryName">
-								<span v-bind:style="ureaFactoryStyle[index]"></span>&nbsp;
-								<span>{{ureaFactoryData[index]}}元/吨</span>&emsp;
-								<span>{{ureaFactoryName[index]}}</span>
+							<div class="priceUrea">
+								<div class="title">
+									<div>
+										<p>工厂{{priceTitle}}成交价统计</p>
+									</div>
+									<div></div>
+								</div>
+								<div class="time">
+									<group>
+										<calendar title=" " @on-change="PriceChange" v-model="listQuery5.startDate"></calendar>
+									</group>
+									<p class='zp'>至</p>
+									<p>{{listQuery.endDate}}</p>
+									<popup-radio @on-hide="PriceChange2" style="margin-left: 0.2rem;" title=" " :options="types" v-model="listQuery5.type"></popup-radio>
+									<div style="clear: both;"></div>
+								</div>
+								<div class="chart">
+									<div id="ureaFactory" :style="{width: '100%', height: '5.66rem'}"></div>
+									<div class="ureaFactoryLagend">
+										<div class="ureaFactoryLagend_item" v-for="(item,index) in ureaFactoryName">
+											<span v-bind:style="ureaFactoryStyle[index]"></span>&nbsp;
+											<span>{{ureaFactoryData[index]}}元/吨</span>&emsp;
+											<span>{{ureaFactoryName[index]}}</span>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+					</swiper-item>
+
+					<swiper-item :key="1">
+						<div>
+							<div class="priceUrea">
+								<div class="title">
+									<div>
+										<p>工厂{{volumeTitle}}成交量统计</p>
+									</div>
+									<div></div>
+								</div>
+								<div class="time">
+									<group>
+										<calendar title=" " @on-change="volumeChange" v-model="listQuery6.startDate"></calendar>
+									</group>
+									<p class='zp'>至</p>
+									<p>{{listQuery.endDate}}</p>
+									<popup-radio @on-hide="volumeChange2" style="margin-left: 0.2rem;" title=" " :options="types" v-model="listQuery6.type"></popup-radio>
+									<div style="clear: both;"></div>
+								</div>
+								<div class="chart">
+									<div id="volumeChart" :style="{width: '100%', height: '5.66rem'}"></div>
+									<div class="ureaFactoryLagend">
+										<div class="ureaFactoryLagend_item" v-for="(item,index) in volumeName">
+											<span v-bind:style="volumeStyle[index]"></span>&nbsp;
+											<span>{{volumeData[index]}}元/吨</span>&emsp;
+											<span>{{volumeName[index]}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</swiper-item>
+				</swiper>
+
 			</div>
 		</div>
 
@@ -132,14 +194,51 @@
 </template>
 
 <script>
-	import DateTime from 'vue-date-time-m';
+	import { Calendar, Group, PopupRadio, ButtonTab, ButtonTabItem, Swiper, SwiperItem, PopupPicker } from 'vux'
 	import { getTypes, getRegion, getBigAreaEverydayPrice, getSunMarketEverydayPrice, getBigAreaTotalVolume, getSunMarketDayPrice, getFactoryEverydayPrice, getFactoryEverydayNum } from '@/api/address';
 	export default {
+		components: {
+			PopupPicker,
+			Calendar,
+			Group,
+			PopupRadio,
+			ButtonTab,
+			ButtonTabItem,
+			Swiper,
+			SwiperItem
+		},
 		data() {
 			return {
+				list3: [{
+					name: '东北工贸大区',
+					value: '东北工贸大区',
+					parent: 0
+				}, {
+					name: '西北工贸大区',
+					value: '西北工贸大区',
+					parent: 0
+				}, {
+					name: '1区',
+					value: '1区',
+					parent: '东北工贸大区'
+				}, {
+					name: '2区',
+					value: '2区',
+					parent: '东北工贸大区'
+				}, {
+					name: '1区',
+					value: '1区',
+					parent: '西北工贸大区'
+				}, {
+					name: '2区',
+					value: '2区',
+					parent: '西北工贸大区'
+				}],
+				index: 0,
+				demo1: 'TODAY',
+				readonly: false,
 				data: '',
 				calendarShow: '',
-				priceUreaCheck: '0',
 				priceUreaChartName: [],
 				priceUreaChartData: [],
 				priceUreaChartStyle: [
@@ -194,36 +293,68 @@
 					"background:linear-gradient(#ffff00, #ffae00)",
 					"background:linear-gradient(#d541b2, #9060f0)"
 				],
-				types: '',
+				volumeName: [],
+				volumeData: [],
+				volumeStyle: [
+					"background:linear-gradient(#1cae95, #7dc16f)",
+					"background:linear-gradient(#469fff, #00caa4)",
+					"background:linear-gradient(#ffff00, #ffae00)",
+					"background:linear-gradient(#d541b2, #9060f0)"
+				],
+				types: [],
 				places: '',
+				PriceUreaTypes: '',
+				priceUreaDate: [],
+				priceUreaCheck: '0',
+				priceUreaTitle: '尿素',
 				listQuery: {
-					startDate: '2019-01-17',
-					endDate: '2019-01-23',
+					startDate: '',
+					endDate: '',
 					type: '尿素 小颗粒',
 				},
 				listQuery2: {
-					startDate: '2019-01-17',
-					endDate: '2019-01-23',
+					startDate: '',
+					endDate: '',
 					type: '尿素 小颗粒',
 					bigArea: '',
 				},
+				quantityUreaTitle: '尿素',
 				listQuery3: {
-					startDate: '2019-01-21',
-					bigArea: '东北工贸大区',
-					sunMarket: '2区',
-				}
+					startDate: '',
+					endDate: '',
+					type: '尿素 小颗粒',
+				},
+				region: ["东北工贸大区", "2区"],
+				listQuery4: {
+					startDate: '',
+					bigArea: '',
+					sunMarket: '',
+				},
+				factoryindex1: 0,
+				priceTitle: '尿素',
+				priceDate: [],
+				listQuery5: {
+					startDate: '',
+					endDate: '',
+					type: '尿素 小颗粒',
+				},
+				volumeTitle: '尿素',
+				volumeDate: [],
+				listQuery6: {
+					startDate: '',
+					endDate: '',
+					type: '尿素 小颗粒',
+				},
 			}
-		},
-		components: {
-			DateTime
 		},
 		mounted() {
 			this.getType();
 			this.getRegions();
-			this.setPriceUreaChart();
-			this.setTurnoverUrea();
-			this.setUreaFactory();
-			this.setDrawLine();
+			this.priceUreaStart();
+			this.quantityUreaStart();
+			this.PriceStart();
+			this.volumeStart();
+			this.allPriceStart();
 		},
 		methods: {
 			getType() {
@@ -234,18 +365,52 @@
 			getRegions() {
 				getRegion().then(res => {
 					this.places = res.data.data;
+					console.log(JSON.stringify(this.places))
 				})
 			},
-			
+			priceUreaStart() {
+				this.listQuery.startDate = this.dayTime(new Date(this.dayTime(new Date())) - 518400000);
+				this.listQuery.endDate = this.dayTime(new Date());
+				this.listQuery2.startDate = this.listQuery.startDate;
+				this.listQuery2.endDate = this.listQuery.endDate;
+			},
+			priceUreaChange2() {
+				this.priceUreaTitle = this.listQuery.type.slice(0, 2)
+				if(this.priceUreaCheck == '0') {
+					this.setPriceUreaChart();
+				} else {
+					this.check();
+				}
+			},
+			priceUreaChange(val) {
+				this.priceUreaDate = [];
+				var endDate = new Date(val).getTime() + 518400000
+				var endDate2 = new Date(val).getTime()
+				this.listQuery.endDate = this.dayTime(endDate);
+				this.priceUreaDate.push(this.dayyTime(endDate2))
+				for(var i = 0; i < 6; i++) {
+					this.priceUreaDate.push(this.dayyTime(endDate2 += 86400000))
+				}
+				console.log(this.priceUreaDate)
+				this.listQuery.startDate = val;
+				this.listQuery.endDate = this.dayTime(endDate);
+				this.listQuery2.startDate = val;
+				this.listQuery2.endDate = this.dayTime(endDate);
+				if(this.priceUreaCheck == '0') {
+					this.setPriceUreaChart();
+				} else {
+					this.check();
+				}
+
+			},
 			setPriceUreaChart() {
 				const _this = this;
 				this.priceUreaChartName = [];
 				this.priceUreaCheck = '0';
-//				this.$refs.priceUreaCheck.style.display = 'block';
-//				this.$refs.priceUreaCheck2.style.display = 'none';
 				let myChart = this.$echarts.init(document.getElementById('priceUreaChart'), {
 					renderer: 'svg'
 				})
+				myChart.clear();
 				myChart.setOption({
 					tooltip: {
 						trigger: 'axis',
@@ -261,7 +426,7 @@
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+						data: this.priceUreaDate,
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
@@ -456,6 +621,7 @@
 							itemStyle: style[i],
 						})
 					}
+					console.log(this.priceUreaChartName)
 					myChart.setOption({
 						series: data,
 					})
@@ -463,16 +629,15 @@
 
 			},
 			check(item, index) {
-				console.log(index)
 				const _this = this;
 				this.priceUreaChartName2 = [];
 				this.priceUreaCheck = '1';
-//				this.$refs.priceUreaCheck.style.display = 'none';
-//				this.$refs.priceUreaCheck2.style.display = 'block';
-				
+				//				this.$refs.priceUreaCheck.style.display = 'none';
+				//				this.$refs.priceUreaCheck2.style.display = 'block';
 				let myChart = this.$echarts.init(document.getElementById('priceUreaChart'), {
 					renderer: 'svg'
 				})
+				myChart.clear();
 				myChart.setOption({
 					tooltip: {
 						trigger: 'axis',
@@ -488,7 +653,7 @@
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+						data: this.priceUreaDate,
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
@@ -525,10 +690,19 @@
 							color: '#8289A3',
 							fontSize: '0.2rem'
 						}
-					},	
+					},
 					series: []
 				})
-				this.listQuery2.bigArea = item;
+				console.log(item)
+				if(item != undefined) {
+					this.listQuery2.bigArea = item;
+					localStorage.setItem('priceUreaItemName', item);
+				} else {
+					this.priceUreaItemName = localStorage.getItem('priceUreaItemName');
+					this.listQuery2.bigArea = this.priceUreaItemName;
+
+				}
+				this.listQuery2.type = this.listQuery.type;
 				getSunMarketEverydayPrice(this.listQuery2).then(res => {
 					console.log(res.data.data)
 					let data = [];
@@ -690,21 +864,28 @@
 				})
 
 			},
+
+			quantityUreaStart() {
+				this.listQuery3.startDate = this.dayTime(new Date(this.dayTime(new Date())) - 518400000);
+				this.listQuery3.endDate = this.dayTime(new Date());
+			},
+			quantityUreaChange(val) {
+				var endDate = new Date(val).getTime() + 518400000
+				this.listQuery3.startDate = val;
+				this.listQuery3.endDate = this.dayTime(endDate);
+				this.setTurnoverUrea();
+			},
+			quantityUreaChange2() {
+				this.quantityUreaTitle = this.listQuery.type.slice(0, 2)
+				this.setTurnoverUrea();
+			},
 			setTurnoverUrea() {
 				let myChart = this.$echarts.init(document.getElementById('turnoverUrea'), {
 					renderer: 'svg'
 				})
 				// 绘制图表
+				myChart.clear();
 				myChart.setOption({
-					title: {
-						text: '中化化肥',
-						textStyle: {
-							color: "#fff",
-							fontWeight: 0,
-							fontFamily: '微软雅黑',
-							fontSize: 20
-						}
-					},
 					tooltip: {
 						trigger: 'item',
 						formatter: "{a} <br/>{b}: {c} ({d}%)",
@@ -732,7 +913,7 @@
 				})
 				this.turnoverUreaName = [];
 				this.turnoverUreaData = [];
-				getBigAreaTotalVolume(this.listQuery).then(res => {
+				getBigAreaTotalVolume(this.listQuery3).then(res => {
 					console.log(res.data.data)
 					let all = 0;
 					let data = [];
@@ -926,12 +1107,35 @@
 					})
 				})
 			},
+			PriceStart() {
+				this.listQuery5.startDate = this.dayTime(new Date(this.dayTime(new Date())) - 518400000);
+				this.listQuery5.endDate = this.dayTime(new Date());
+			},
+			PriceChange(val) {
+				this.priceDate = [];
+				var endDate = new Date(val).getTime() + 518400000
+				var endDate2 = new Date(val).getTime()
+				this.listQuery5.endDate = this.dayTime(endDate);
+				this.priceDate.push(this.dayyTime(endDate2))
+				for(var i = 0; i < 6; i++) {
+					this.priceDate.push(this.dayyTime(endDate2 += 86400000))
+				}
+				this.listQuery5.startDate = val;
+				this.listQuery5.endDate = this.dayTime(endDate);
+				this.setUreaFactory();
+
+			},
+			PriceChange2() {
+				this.priceTitle = this.listQuery5.type.slice(0, 2)
+				this.setUreaFactory()
+			},
 			setUreaFactory() {
 				const _this = this;
 				let myChart = this.$echarts.init(document.getElementById('ureaFactory'), {
 					renderer: 'svg'
 				})
 				// 绘制图表
+				myChart.clear();
 				myChart.setOption({
 					tooltip: {
 						trigger: 'axis',
@@ -947,7 +1151,7 @@
 					xAxis: {
 						type: 'category',
 						boundaryGap: false,
-						data: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7'],
+						data: this.priceDate,
 						axisLine: {
 							lineStyle: {
 								color: '#5d6069'
@@ -989,7 +1193,7 @@
 				});
 				this.ureaFactoryName = [];
 				this.ureaFactoryData = [];
-				getFactoryEverydayPrice(this.listQuery).then(res => {
+				getFactoryEverydayPrice(this.listQuery5).then(res => {
 					console.log(res.data.data)
 					let data = [];
 					let style = [{
@@ -1080,16 +1284,206 @@
 					})
 				})
 			},
+			volumeStart() {
+				this.listQuery6.startDate = this.dayTime(new Date(this.dayTime(new Date())) - 518400000);
+				this.listQuery6.endDate = this.dayTime(new Date());
+			},
+			volumeChange(val) {
+				this.volumeDate = [];
+				var endDate = new Date(val).getTime() + 518400000
+				var endDate2 = new Date(val).getTime()
+				this.listQuery6.endDate = this.dayTime(endDate);
+				this.volumeDate.push(this.dayyTime(endDate2))
+				for(var i = 0; i < 6; i++) {
+					this.volumeDate.push(this.dayyTime(endDate2 += 86400000))
+				}
+				this.listQuery6.startDate = val;
+				this.listQuery6.endDate = this.dayTime(endDate);
+				this.setvolumeChart();
+
+			},
+			volumeChange2() {
+				this.volumeTitle = this.listQuery6.type.slice(0, 2)
+				this.setvolumeChart()
+			},
+			setvolumeChart() {
+				const _this = this;
+				let myChart = this.$echarts.init(document.getElementById('volumeChart'), {
+					renderer: 'svg'
+				})
+				// 绘制图表
+				myChart.clear();
+				myChart.setOption({
+					tooltip: {
+						trigger: 'axis',
+						confine: true,
+						alwaysShowContent: true,
+						formatter: function(params) {
+							_this.volumeData = [];
+							for(var i = 0; i < params.length; i++) {
+								_this.volumeData.push(params[i].data)
+							}
+						}
+					},
+					xAxis: {
+						type: 'category',
+						boundaryGap: false,
+						data: this.priceDate,
+						axisLine: {
+							lineStyle: {
+								color: '#5d6069'
+							}
+						},
+						axisLabel: {
+							interval: 0,
+							color: '#7C839F',
+							fontSize: '0.22rem'
+						},
+						axisTick: {
+							alignWithLabel: true,
+						}
+					},
+					yAxis: {
+						type: 'value',
+						position: 'right',
+						nameLocation: 'end',
+						nameGap: 20,
+						axisTick: {
+							show: false
+						},
+						axisLine: {
+							show: false,
+						},
+						splitLine: {
+							lineStyle: {
+								// 使用深浅的间隔色
+								color: "#5d6069"
+							}
+						},
+						axisLabel: {
+							show: true,
+							color: '#8289A3',
+							fontSize: '0.2rem'
+						}
+					},
+					series: []
+				});
+				this.volumeName = [];
+				this.volumeData = [];
+				getFactoryEverydayNum(this.listQuery6).then(res => {
+					console.log(res.data.data)
+					let data = [];
+					let style = [{
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#1cae95' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#7dc16f' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#469fff' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#00caa4' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#ffff00' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#ffae00' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}, {
+						normal: {
+							color: {
+								type: 'linear',
+								x: 0.5,
+								y: 0.5,
+								r: 0.5,
+								colorStops: [{
+									offset: 0,
+									color: '#d541b2' // 0% 处的颜色
+								}, {
+									offset: 1,
+									color: '#9060f0' // 100% 处的颜色
+								}],
+								globalCoord: false // 缺省为 false
+							}
+						}
+					}];
+					for(var i = 0; i < res.data.data.length; i++) {
+						this.volumeName.push(res.data.data[i].factoryName)
+						this.volumeData.push(res.data.data[i].factoryData[6])
+						data.push({
+							name: this.volumeName[i],
+							type: 'line',
+							symbol: 'circle',
+							showSymbol: false,
+							symbolSize: 3,
+							data: res.data.data[i].factoryData,
+							itemStyle: style[i],
+						})
+					}
+					myChart.setOption({
+						series: data,
+					})
+				})
+			},
+			allPriceStart() {
+				this.listQuery4.startDate = "2019-01-21";
+				this.listQuery4.bigArea = this.region[0]
+				this.listQuery4.sunMarket = this.region[1]
+			},
+			allPriceChange(val) {
+				this.listQuery4.startDate = val;
+				this.setDrawLine();
+			},
+			allPriceChange2(val) {
+				this.listQuery4.bigArea = val[0];
+				this.listQuery4.sunMarket = val[1];
+				this.setDrawLine();
+			},
 			setDrawLine() {
 				// 基于准备好的dom，初始化echarts实例
 				let myChart = this.$echarts.init(document.getElementById('allPriceChart'), {
 					renderer: 'svg'
 				})
-
 				// 绘制图表
 				this.allPriceChartName = [];
 				this.allPriceChartData = [];
-				getSunMarketDayPrice(this.listQuery2).then(res => {
+				getSunMarketDayPrice(this.listQuery4).then(res => {
 					console.log(res.data.data)
 					let data = [];
 					let style = [];
@@ -1097,17 +1491,13 @@
 						this.allPriceChartName.push(res.data.data[i].productName)
 						this.allPriceChartData.push(res.data.data[i].dealPrice)
 					}
+					console.log()
+					myChart.clear();
 					myChart.setOption({
 						tooltip: {
 							trigger: 'item',
 							//							formatter: '{b}：{c}元/吨',
 							alwaysShowContent: true,
-						},
-						grid: {
-							left: '6%',
-							right: '1%',
-							bottom: '0%',
-							containLabel: true
 						},
 						xAxis: {
 							data: this.allPriceChartName,
@@ -1118,7 +1508,27 @@
 							},
 							axisLabel: {
 								color: '#7C839F',
-								fontSize: '0.22rem'
+								fontSize: '0.2rem',
+								interval: 0,
+								formatter: function(value) {
+									var ret = ""; //拼接加\n返回的类目项  
+									var maxLength = 3; //每项显示文字个数  
+									var valLength = value.length; //X轴类目项的文字个数  
+									var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数  
+									if(rowN > 1){
+										for(var i = 0; i < rowN; i++) {
+											var temp = ""; //每次截取的字符串  
+											var start = i * maxLength; //开始截取的位置  
+											var end = start + maxLength; //结束截取的位置  
+											//这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧  
+											temp = value.substring(start, end) + "\n";
+											ret += temp; //凭借最终的字符串  
+										}
+										return ret;
+									} else {
+										return value;
+									}
+								}
 							},
 							axisLine: {
 								lineStyle: {
@@ -1156,7 +1566,7 @@
 						series: [{
 							name: '成交价格',
 							type: 'bar',
-							barWidth: 20,
+							barWidth: 10,
 							itemStyle: {
 								normal: {　　　
 									//定义一个list，然后根据所以取得不同的值，这样就实现了，　　　　　　　　　　　
@@ -1268,6 +1678,110 @@
 		}
 	}
 </script>
+<style type="text/css">
+	.vux-button-group {
+		width: 3rem;
+		padding-top: 0.22rem;
+		padding-left: 0.22rem;
+	}
+	
+	.vux-button-group>a.vux-button-group-current {
+		background: #2E3A66 !important;
+	}
+	
+	.vux-button-group>a.vux-button-tab-item-first:after {
+		color: #2E3A66 !important;
+		border: 1px solid #2E3A66 !important;
+	}
+	
+	.vux-button-group>a.vux-button-tab-item-last:after {
+		color: #2E3A66 !important;
+		border: 1px solid #2E3A66 !important;
+	}
+	
+	.vux-no-group-title,
+	.weui-cells {
+		margin-top: 0 !important;
+	}
+	
+	.weui-cell {
+		padding: 0 !important;
+	}
+	
+	.vux-cell-bd {
+		display: none;
+	}
+	
+	.weui-cell_access .weui-cell__ft:after,
+	.weui-cells:after {
+		border-color: #2E3A66 !important;
+	}
+	
+	.region {
+		margin-left: 0.15rem;
+	}
+	
+	.region .weui-cell_access {
+		width: 3rem !important;
+		margin-left: 0.15rem;
+	}
+	
+	.region .vux-popup-picker-value {
+		width: 3rem !important
+	}
+	
+	.vux-popup-picker-select {
+		text-align: center !important;
+	}
+	
+	.region .weui-cell__ft {
+		display: none;
+	}
+	
+	.weui-check__label {
+		padding: 0.1rem !important;
+	}
+	
+	.weui-cell__bd p {
+		margin-left: 0.24rem;
+	}
+	
+	.weui-check__label .weui-cell__ft {
+		background: #fff !important;
+	}
+	
+	.vux-calendar:before,
+	.weui-cells:before,
+	.weui-cell:before {
+		border-color: #2A3356 !important;
+	}
+	
+	.weui-cell_access .weui-cell__ft {
+		padding-right: 0 !important;
+	}
+	
+	.weui-cell__ft,
+	.weui-cells,
+	.vux-tap-active {
+		color: white !important;
+		height: 0.5rem;
+		width: 1.6rem;
+		border-radius: 0.25rem;
+		background: #2E3A66 !important;
+		float: left;
+		font-size: 0.24rem;
+		text-align: center !important;
+		line-height: 0.5rem;
+	}
+	
+	.vux-cell-value {
+		color: white !important;
+	}
+	
+	.vux-cell-primary {
+		flex: none;
+	}
+</style>
 <style lang="scss" type="text/css">
 	.box {
 		width: 100%;
@@ -1278,7 +1792,7 @@
 			h1 {
 				padding-top: 0.28rem;
 				padding-left: 0.28rem;
-				span {
+				p {
 					font-size: 0.6rem;
 					font-weight: 500;
 					color: white;
@@ -1301,7 +1815,7 @@
 						box-sizing: border-box;
 						padding-top: 0.1rem;
 						padding-left: 0.25rem;
-						width: 3.95rem;
+						padding-right: 0.25rem;
 						height: 0.53rem;
 						background: rgba(86, 105, 254, 0.5);
 						border-radius: 5px;
@@ -1311,10 +1825,11 @@
 						font-weight: 500;
 						p {
 							font-size: 0.32rem;
+							line-height: 0.45rem;
 						}
 					}
 					div:nth-of-type(2) {
-						width: 3.95rem;
+						width: 4rem;
 						height: 0.53rem;
 						background: rgb(141, 73, 206);
 						border-radius: 5px;
@@ -1352,6 +1867,7 @@
 					height: 8.66rem;
 					background: #2e3a66;
 					padding: 0 0.28rem;
+					position: relative;
 				}
 				.chart2 {
 					display: none;
@@ -1381,8 +1897,8 @@
 		height: 7.1rem !important;
 	}
 	
-	.allPrice .title div {
-		width: 4.269rem !important;
+	.allPrice .title div:nth-of-type(2) {
+		width: 4.35rem !important;
 	}
 	
 	.factory .title div {

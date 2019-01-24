@@ -4,8 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
-import dateTime from 'vue-date-time-m';
-Vue.component('data-time', dateTime)
+import { AlertPlugin, ToastPlugin } from 'vux'
+import Method from '@/api/globalMethod';
+
+Vue.use(Method);
+Vue.use(AlertPlugin)
+Vue.use(ToastPlugin)
 
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;
